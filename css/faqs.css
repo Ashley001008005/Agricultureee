@@ -47,6 +47,21 @@
     color: var(--primary-text);
 }
 
+#see-more{
+    width: fit-content;
+    text-decoration: none;
+    color: var(--secondary);
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+#see-more:hover{
+    background: var(--secondary);
+    color: var(--surface-card);
+    transition: 0.3s ease;
+}
+
 .faq-right {
     display: flex;
     flex-direction: column;

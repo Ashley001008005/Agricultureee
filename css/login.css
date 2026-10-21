@@ -1,0 +1,295 @@
+#loginForm {
+    grid-area: form;
+    width: 100%;
+    padding: var(--space-xl) max(var(--space-lg), calc((100% - 440px) / 2));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-md);
+    transition: transform var(--swap-time) cubic-bezier(0.77, 0, 0.175, 1),
+        opacity var(--swap-time) ease;
+}
+
+.page-layout.is-swapping #loginForm {
+    transform: translateX(var(--shift));
+}
+
+/* ============ FORM TITLE ============ */
+.form-title {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border);
+}
+
+.form-title h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: var(--fs-xl);
+    font-weight: 500;
+}
+
+.form-title p {
+    font-size: var(--fs-sm);
+    color: var(--secondary-text);
+}
+
+/* ============ LABEL ROW + LINKS ============ */
+.label-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+}
+
+.text-link {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.text-link:hover {
+    color: var(--primary-hover);
+}
+
+/* ============ PASSWORD FIELD + TOGGLE ============ */
+.input-wrap--password {
+    position: relative;
+}
+
+.input-wrap--password input {
+    padding-right: 72px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: var(--space-sm);
+    transform: translateY(-50%);
+    padding: var(--space-xs);
+    font-family: inherit;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--secondary-text);
+    background: none;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color);
+}
+
+.password-toggle:focus-visible,
+.text-link:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ============ REMEMBER ME ============ */
+/* .terms-row already has a top margin meant for the signup form;
+   the login form's gap is enough. */
+.remember-row {
+    margin-top: 0;
+}
+
+
+/* ============ OTP VERIFICATION MODAL ============ */
+
+.otp-overlay[hidden] {
+    display: none !important;
+}
+
+.otp-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(24, 22, 20, 0.72);
+    backdrop-filter: blur(5px);
+}
+
+.otp-modal {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    padding: 36px 28px 28px;
+    background: #F8F4EC;
+    color: #181614;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    animation: otpAppear 0.22s ease-out;
+}
+
+.otp-close {
+    position: absolute;
+    top: 12px;
+    right: 17px;
+    border: none;
+    background: transparent;
+    color: #665B4D;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.otp-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #E9DCC5;
+    font-size: 30px;
+}
+
+.otp-modal h2 {
+    margin: 0 0 12px;
+    font-size: 25px;
+}
+
+.otp-description {
+    margin: 0 auto 26px;
+    color: #6C6256;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.otp-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.otp-digit {
+    box-sizing: border-box;
+    width: 46px;
+    height: 54px;
+    border: 1px solid #D6C7B0;
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: #181614;
+    font-size: 23px;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+}
+
+.otp-digit:focus {
+    border-color: #8C5F28;
+    box-shadow: 0 0 0 3px rgba(140, 95, 40, 0.15);
+}
+
+.otp-verify,
+.otp-cancel {
+    width: 100%;
+    min-height: 46px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.otp-verify {
+    border: none;
+    background: #8C5F28;
+    color: #FFFFFF;
+}
+
+.otp-verify:hover {
+    background: #70491C;
+}
+
+.otp-verify:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+.otp-cancel {
+    margin-top: 10px;
+    border: 1px solid #D6C7B0;
+    background: transparent;
+    color: #665B4D;
+}
+
+.otp-security {
+    margin: 20px 0 0;
+    font-size: 12px;
+    color: #817466;
+}
+
+.otp-error {
+    margin: 0 0 14px;
+    color: #B42318;
+    font-size: 14px;
+}
+
+@keyframes otpAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 420px) {
+    .otp-modal {
+        padding: 34px 16px 24px;
+    }
+
+    .otp-inputs {
+        gap: 5px;
+    }
+
+    .otp-digit {
+        width: min(12vw, 43px);
+        height: 49px;
+        font-size: 21px;
+    }
+}
+
+@media (max-width: 800px) {
+    #loginForm {
+        min-height: 100dvh;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    #loginForm .topbar-text {
+        margin-top: auto;
+        padding-top: var(--space-lg);
+        text-align: center;
+    }
+}
+
+/* ============ SMALL SCREENS ============ */
+@media (max-width: 480px) {
+    #loginForm {
+        width: 100%;
+        max-width: 440px;
+        min-height: 100dvh;
+        margin-inline: auto;
+        padding: 24px 20px;
+        justify-content: center;
+    }
+
+    .form-title {
+        text-align: center;
+    }
+}

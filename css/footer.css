@@ -1,7 +1,18 @@
+/* Soft palette: a slightly deeper shade than the contact section, in both
+   themes, so the page flows down instead of jumping from light to black. */
 .footer {
+    --footer-surface: #E6DBC8;
+    --footer-line: rgba(41, 35, 31, 0.15);
+
     padding: 70px 0 0;
-    background: var(--primary-color);
-    color: var(--surface-card);
+    background: var(--footer-surface);
+    color: var(--primary-text);
+    border-top: 1px solid var(--border);
+}
+
+:root[data-theme="dark"] .footer {
+    --footer-surface: #141210;
+    --footer-line: rgba(244, 239, 231, 0.12);
 }
 
 .footer-container {
@@ -26,11 +37,11 @@
     font-family: 'Outfit', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--surface-card);
+    color: var(--primary-text);
 }
 
 .footer-brand h2 span {
-    color: var(--secondary);
+    color: var(--primary-color);
 }
 
 .footer-brand p {
@@ -41,7 +52,7 @@
     font-size: 0.9rem;
     line-height: 1.7;
 
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--secondary-text);
 }
 
 .footer-socials {
@@ -59,18 +70,23 @@
 
     border-radius: 10px;
 
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--surface-card);
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    color: var(--primary-color);
 
     text-decoration: none;
 
     transition:
         background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
         transform 0.3s ease;
 }
 
 .footer-socials a:hover {
-    background: var(--secondary);
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--on-image, #FFFFFF);
     transform: translateY(-3px);
 }
 
@@ -90,7 +106,7 @@
     font-size: 1.1rem;
     font-weight: 600;
 
-    color: var(--surface-card);
+    color: var(--primary-text);
 }
 
 .footer-links a {
@@ -99,7 +115,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 0.85rem;
 
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--secondary-text);
     text-decoration: none;
 
     transition:
@@ -108,7 +124,7 @@
 }
 
 .footer-links a:hover {
-    color: var(--secondary);
+    color: var(--primary-color);
     transform: translateX(4px);
 }
 
@@ -123,12 +139,12 @@
     font-family: 'Poppins', sans-serif;
     font-size: 0.85rem;
 
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--secondary-text);
 }
 
 .footer-contact i {
     width: 18px;
-    color: var(--secondary);
+    color: var(--primary-color);
 }
 
 
@@ -141,7 +157,7 @@
     justify-content: space-between;
     gap: 20px;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid var(--footer-line);
 }
 
 .footer-bottom p {
@@ -150,7 +166,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 0.75rem;
 
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--secondary-text);
 }
 
 .footer-bottom div {
@@ -162,14 +178,14 @@
     font-family: 'Poppins', sans-serif;
     font-size: 0.75rem;
 
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--secondary-text);
     text-decoration: none;
 
     transition: color 0.3s ease;
 }
 
 .footer-bottom a:hover {
-    color: var(--secondary);
+    color: var(--primary-color);
 }
 
 

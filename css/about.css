@@ -89,7 +89,7 @@
     border: none;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.45);
-    color: rgb(103, 64, 64);
+    color: var(--surface-card);
     font-size: 24px;
     cursor: pointer;
     display: flex;

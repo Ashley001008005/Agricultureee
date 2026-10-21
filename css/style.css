@@ -1,5 +1,6 @@
+/* ============ DESIGN TOKENS ============ */
 :root {
-    /*light mode*/
+    /* light mode */
     --primary-color: #C65D3A;
     --primary-hover: #653528;
     --secondary: #a8b583;
@@ -13,7 +14,13 @@
     --warning: #D99A32;
     --error: #B94A48;
 
-    /*dark mode*/
+    /* fixed colors that do NOT change with the theme
+       (text on photos, dark sections, accent buttons) */
+    --on-image: #FFFFFF;
+    --footer-bg: #29231F;
+    --contact-bg: #653528;
+
+    /* dark mode source values */
     --primary-color-dm: #E07852;
     --primary-hover-dm: #F08B68;
     --secondary-dm: #9AA76B;
@@ -28,6 +35,52 @@
     --error-dm: #D86B67;
 }
 
+:root {
+    color-scheme: light;
+
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 20px;
+    --space-lg: 32px;
+    --space-xl: 48px;
+
+    --fs-xs: 0.8rem;
+    --fs-sm: 0.9rem;
+    --fs-md: 0.95rem;
+    --fs-lg: 1.1rem;
+    --fs-xl: clamp(1.6rem, 3vw, 2.4rem);
+
+    --radius: 10px;
+    --swap-time: 0.65s;
+}
+
+/* ============ DARK THEME (set by the toggle via data-theme) ============ */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --primary-color: var(--primary-color-dm);
+    --primary-hover: var(--primary-hover-dm);
+    --secondary: var(--secondary-dm);
+    --secondary-hover: var(--secondary-hover-dm);
+    --background: var(--background-dm);
+    --surface-card: var(--surface-card-dm);
+    --primary-text: var(--primary-text-dm);
+    --secondary-text: var(--secondary-text-dm);
+    --border: var(--border-dm);
+    --success: var(--success-dm);
+    --warning: var(--warning-dm);
+    --error: var(--error-dm);
+
+    --footer-bg: #0F0D0C;
+    --contact-bg: #2B1B15;
+}
+
+/* Lighter dropdown arrow so it stays visible on dark inputs */
+:root[data-theme="dark"] .input-wrap select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23B8AEA2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+/* ============ BASE ============ */
 html {
     scroll-behavior: smooth;
 }
@@ -41,8 +94,10 @@ html {
 body {
     background-color: var(--background);
     color: var(--primary-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* ============ HEADER ============ */
 .header {
     position: absolute;
     top: 0;
@@ -76,12 +131,12 @@ body {
 .logo h1 {
     font-family: 'Outfit', sans-serif;
     font-size: clamp(1.5rem, 3vw, 2rem);
-    color: var(--surface-card);
+    color: var(--on-image);
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .logo h1 span {
-    color: var(--primary-color);
+    color: var(--secondary);
 }
 
 .logo-image {
@@ -92,6 +147,57 @@ body {
     display: none;
 }
 
+/* ============ THEME TOGGLE ============ */
+/* Pushes the toggle next to the nav instead of floating in the middle */
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-left: auto;
+    margin-right: var(--space-md);
+}
+
+/* Sits on the hero photo, so it uses a translucent look that works in both themes */
+.theme-toggle {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    color: var(--on-image);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    color: var(--secondary);
+    border-color: var(--secondary);
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Show the moon in light mode, the sun in dark mode */
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+    display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+    display: block;
+}
+
+/* ============ NAVIGATION ============ */
 .navigations {
     display: flex;
     align-items: center;
@@ -100,27 +206,30 @@ body {
 
 .navigations a {
     font-family: 'Poppins', sans-serif;
-    color: var(--surface-card);
+    color: var(--on-image);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.navigations a:hover {
+/* green hover for plain links only, so the button text stays white */
+.navigations a:not(#get-started):hover {
     color: var(--secondary);
 }
 
 #get-started {
     padding: 10px 20px;
     background-color: var(--primary-color);
-    color: var(--surface-card);
+    color: var(--on-image);
     border-radius: 10px;
+    transition: background-color 0.3s ease;
 }
 
 #get-started:hover {
     background-color: var(--primary-hover);
-    transition: background-color 0.3s ease;
+    color: var(--on-image);
 }
 
+/* ============ HERO ============ */
 .hero {
     position: relative;
     min-height: clamp(450px, 70vh, 700px);
@@ -163,7 +272,7 @@ body {
     font-size: clamp(2rem, 5vw, 4rem);
     font-weight: 500;
     text-shadow: 5px 5px 20px rgba(0, 0, 0, 0.537);
-    color: var(--surface-card);
+    color: var(--on-image);
     margin-bottom: 20px;
 }
 
@@ -171,33 +280,39 @@ body {
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
     text-shadow: 5px 5px 20px rgba(0, 0, 0, 0.537);
-    color: var(--surface-card);
+    color: var(--on-image);
     margin-bottom: 20px;
 }
 
 .hero-content #get-started {
     padding: 10px 20px;
-    color: var(--surface-card);
+    color: var(--on-image);
     font-family: 'Poppins', sans-serif;
     text-decoration: none;
     border-radius: 40px;
     width: fit-content;
 }
 
+/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
 
     .header-content {
         justify-content: space-between;
     }
 
+    .topbar-actions {
+        margin-right: var(--space-sm);
+    }
+
     .navigations {
-        gap: 15px;
+        gap: 50px;
     }
 
     .navigations #get-started {
         font-size: 0.8rem;
         padding: 8px 15px;
         display: block;
+        margin-right: 10px;
     }
 
     .navigations a:not(#get-started) {
@@ -208,7 +323,7 @@ body {
         display: block;
         font-size: 1.5rem;
         cursor: pointer;
-        color: var(--surface-card);
+        color: var(--on-image);
     }
 
     .hero {
@@ -229,6 +344,15 @@ body {
 
     .header-content {
         padding: 0 10px;
+    }
+
+    .topbar-actions {
+        margin-right: 10px;
+    }
+
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
     }
 
     .logo h1 {

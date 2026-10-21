@@ -1,6 +1,18 @@
+/* Softer palette: the section is a slightly shifted version of the page
+   background instead of a dark block, so it blends in both themes. */
 .contact {
+    --contact-surface: #EFE6D6;
+    --contact-label-bg: rgba(198, 93, 58, 0.12);
+
     padding: 100px 0;
-    background: var(--primary-hover);
+    background: var(--contact-surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+:root[data-theme="dark"] .contact {
+    --contact-surface: #1E1B18;
+    --contact-label-bg: rgba(224, 120, 82, 0.14);
 }
 
 .contact-container {
@@ -28,8 +40,8 @@
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 2px;
-    color: var(--secondary);
-    background: rgba(198, 93, 58, 0.1);
+    color: var(--primary-color);
+    background: var(--contact-label-bg);
     border-radius: 30px;
 }
 
@@ -39,11 +51,11 @@
     font-size: clamp(3rem, 5vw, 5rem);
     line-height: 0.95;
     font-weight: 600;
-    color: var(--surface-card);
+    color: var(--primary-text);
 }
 
 .contact-info h1 span {
-    color: var(--secondary);
+    color: var(--primary-color);
 }
 
 .contact-info>p {
@@ -51,7 +63,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     line-height: 1.8;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--secondary-text);
 }
 
 .contact-details {
@@ -85,14 +97,14 @@
     margin: 0 0 3px;
     font-family: 'Outfit', sans-serif;
     font-size: 1rem;
-    color: var(--surface-card);
+    color: var(--primary-text);
 }
 
 .contact-item p {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--secondary-text);
 }
 
 
@@ -101,7 +113,7 @@
     background: var(--surface-card);
     border: 1px solid var(--border);
     border-radius: 25px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
 }
 
 .contact-form {
@@ -126,8 +138,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--surface-card);
-    background: rgba(255, 255, 255, 0.15);
+    color: var(--primary-text);
 }
 
 .form-group input,
@@ -171,8 +182,7 @@
 .form-group input:focus,
 .form-group textarea:focus {
     border-color: var(--primary-color);
-    box-shadow:
-        0 0 0 3px rgba(198, 93, 58, 0.1);
+    box-shadow: 0 0 0 3px rgba(198, 93, 58, 0.15);
     background: var(--surface-card);
 }
 
@@ -188,7 +198,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--surface-card);
+    color: var(--on-image, #FFFFFF);
     background: var(--primary-color);
     cursor: pointer;
     transition:
