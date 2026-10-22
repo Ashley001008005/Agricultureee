@@ -121,20 +121,75 @@ otpModal.addEventListener("click", event => {
     if (event.target === otpModal) closeOtpModal();
 });
 
-
 async function getApprovedDestination(userId) {
-    // Check whether the authenticated user is an administrator.
+    // 1. Check existing administrator accounts.
     const { data: admin, error: adminError } = await supabase
         .from("admin_users")
         .select("user_id")
         .eq("user_id", userId)
         .maybeSingle();
 
-    if (adminError) throw adminError;
+    if (adminError) {
+        console.error("Admin lookup failed:", adminError);
+        throw new Error("Unable to check your administrator account.");
+    }
 
     if (admin) return "./admin-dashboard.html";
 
-    // Fetch the user's own profile.
+    // 2. Check staff accounts using the Supabase Auth UUID.
+    const { data: staff, error: staffError } = await supabase
+        .from("staff_accounts")
+        .select("staff_id, user_id, role_id, status_id")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+    if (staffError) {
+        console.error("Staff lookup failed:", staffError);
+        throw new Error("Unable to check your staff account.");
+    }
+
+    if (staff) {
+        // Only Active staff accounts (status_id = 1) may continue.
+        if (staff.status_id !== 1) {
+            throw new Error(
+                "Your staff account is inactive or unavailable. Contact the administrator."
+            );
+        }
+
+        // Retrieve the staff role.
+        const { data: role, error: roleError } = await supabase
+            .from("staff_roles")
+            .select("role_name")
+            .eq("role_id", staff.role_id)
+            .maybeSingle();
+
+        if (roleError) {
+            console.error("Staff role lookup failed:", roleError);
+            throw new Error("Unable to check your staff role.");
+        }
+
+        if (!role) {
+            throw new Error("Your staff role could not be found.");
+        }
+
+        const staffRolePages = {
+            "Farm Manager": "./farm-manager-dashboard.html",
+            "Warehouse Officer": "./warehouse-officer-dashboard.html",
+            "Agricultural Technician": "./agricultural-technician-dashboard.html",
+            "Accountant": "./accountant-dashboard.html",
+            "Admin": "./admin-dashboard.html"
+        };
+
+        const destination = staffRolePages[role.role_name];
+
+        if (!destination) {
+            throw new Error("Your staff role is not recognized.");
+        }
+
+        return destination;
+    }
+
+    // 3. Existing Farmer, Buyer, and Supplier accounts.
     const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("id, role, status")
@@ -167,7 +222,6 @@ async function getApprovedDestination(userId) {
         );
     }
 
-    // Accept both status values used by your system.
     if (!["active", "approved"].includes(profile.status)) {
         throw new Error("Your account is not active.");
     }
@@ -254,8 +308,15 @@ form.addEventListener("submit", async event => {
         openOtpModal(email);
         button.textContent = "Waiting for verification...";
 
-        // Wait until the user verifies the code or cancels.
         const otp = await new Promise(resolve => {
+            let settled = false;
+
+            const finish = value => {
+                if (settled) return;
+                settled = true;
+                resolve(value);
+            };
+
             otpForm.onsubmit = async otpEvent => {
                 otpEvent.preventDefault();
 
@@ -273,7 +334,7 @@ form.addEventListener("submit", async event => {
                 otpVerifyButton.textContent = "Verifying...";
 
                 try {
-                    // STEP 3: Verify the code while keeping the modal open.
+                    // STEP 3: Verify the OTP.
                     const verifyData = await invokeOtpFunction({
                         action: "verify",
                         challengeId,
@@ -291,7 +352,7 @@ form.addEventListener("submit", async event => {
 
                     verifiedSession = verifyData.session;
                     otpModal.hidden = true;
-                    resolve(code);
+                    finish(code);
                 } catch (error) {
                     setOtpError(
                         error.message || "Invalid code. Please try again."
@@ -310,11 +371,16 @@ form.addEventListener("submit", async event => {
             };
 
             const finishOnCancel = () => {
-                if (otpCancelled) resolve(null);
+                if (otpCancelled) finish(null);
             };
 
-            otpCancel.addEventListener("click", finishOnCancel, { once: true });
-            otpClose.addEventListener("click", finishOnCancel, { once: true });
+            otpCancel.addEventListener("click", finishOnCancel, {
+                once: true
+            });
+
+            otpClose.addEventListener("click", finishOnCancel, {
+                once: true
+            });
         });
 
         if (otp === null) {
@@ -322,7 +388,7 @@ form.addEventListener("submit", async event => {
             return;
         }
 
-        // STEP 4: Obtain the verified session.
+        // STEP 4: Establish the verified Supabase session.
         if (
             !verifiedSession?.access_token ||
             !verifiedSession?.refresh_token
@@ -344,7 +410,7 @@ form.addEventListener("submit", async event => {
 
         sessionEstablished = true;
 
-        // STEP 5: Check account status and navigate.
+        // STEP 5: Check status and route to the correct page.
         const destination = await getApprovedDestination(
             sessionData.user.id
         );
@@ -354,7 +420,7 @@ form.addEventListener("submit", async event => {
         console.error("Login error:", error);
 
         if (sessionEstablished) {
-            await supabase.auth.signOut().catch(() => { });
+            await supabase.auth.signOut().catch(() => {});
         }
 
         showMessage(

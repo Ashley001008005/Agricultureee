@@ -1,0 +1,86 @@
+/* Staff Account Management. Uses Tanikala's existing theme variables, so light/dark follow the site. */
+.staff-search,
+.staff-form input,
+.staff-form select,
+.staff-inline-role {
+    font: inherit;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    min-width: 0;
+}
+
+.staff-search {
+    min-width: 220px;
+    flex: 1 1 220px;
+}
+
+.staff-inline-role {
+    max-width: 100%;
+}
+
+.staff-search:focus-visible,
+.staff-form input:focus-visible,
+.staff-form select:focus-visible,
+.staff-inline-role:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 1px;
+}
+
+/* Keep dropdown lists readable in both themes */
+.staff-form option,
+.staff-inline-role option {
+    background: Canvas;
+    color: CanvasText;
+}
+
+.staff-dialog {
+    width: min(30rem, calc(100% - 2rem));
+}
+
+.staff-form {
+    display: grid;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.staff-form label {
+    display: grid;
+    gap: 6px;
+    font-size: 0.9rem;
+}
+
+.staff-form .err {
+    color: var(--error);
+}
+
+.staff-form [aria-invalid="true"] {
+    border-color: var(--error);
+}
+
+.staff-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.staff-count {
+    margin: 10px 0 0;
+}
+
+.staff-retry {
+    margin-top: 8px;
+}
+
+.badge.staff-suspended {
+    background: color-mix(in srgb, orange 20%, transparent);
+    color: inherit;
+}
+
+.badge.staff-deleted {
+    background: color-mix(in srgb, gray 25%, transparent);
+    color: inherit;
+}

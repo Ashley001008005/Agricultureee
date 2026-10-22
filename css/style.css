@@ -3,7 +3,8 @@
     /* light mode */
     --primary-color: #C65D3A;
     --primary-hover: #653528;
-    --secondary: #a8b583;
+    --secondary: #84935c;
+    --logo: #84935c;
     --secondary-hover: #414a29;
     --background: #F8F4EC;
     --surface-card: #FFFFFF;
@@ -23,7 +24,8 @@
     /* dark mode source values */
     --primary-color-dm: #E07852;
     --primary-hover-dm: #F08B68;
-    --secondary-dm: #9AA76B;
+    --secondary-dm: #93a065;
+    --logo-dm: #aab785;
     --secondary-hover-dm: #bcc997;
     --background-dm: #181614;
     --surface-card-dm: #24211E;
@@ -132,11 +134,11 @@ body {
     font-family: 'Outfit', sans-serif;
     font-size: clamp(1.5rem, 3vw, 2rem);
     color: var(--on-image);
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 5px rgba(23, 4, 4, 0.5);
 }
 
 .logo h1 span {
-    color: var(--secondary);
+    color: var(--logo);
 }
 
 .logo-image {
@@ -165,22 +167,22 @@ body {
     display: grid;
     place-items: center;
     color: var(--on-image);
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border: 1px solid var(--border-color, #644d2e);
     border-radius: 50%;
+    background: var(--primary, #140e0e);
     cursor: pointer;
     backdrop-filter: blur(6px);
     transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .theme-toggle:hover {
-    color: var(--secondary);
-    border-color: var(--secondary);
-    background-color: rgba(255, 255, 255, 0.25);
+    color: var(--surface-card);
+    border-color: var(--surface-card);
+    background-color: var(--primary-color);
 }
 
 .theme-toggle:focus-visible {
-    outline: 2px solid var(--primary-color);
+    outline: 2px solid var(--primary);
     outline-offset: 2px;
 }
 
@@ -216,15 +218,27 @@ body {
     color: var(--secondary);
 }
 
-#get-started {
+#services {
     padding: 10px 20px;
+    width: 100%;
+    max-width: 165px;
+    text-decoration: none;
+    border-radius: 20px;
+    color: var(--primary-text-dm);
     background-color: var(--primary-color);
-    color: var(--on-image);
-    border-radius: 10px;
     transition: background-color 0.3s ease;
 }
 
-#get-started:hover {
+#get-started {
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: var(--on-image);
+    background-color: var(--primary-color);
+    transition: background-color 0.3s ease;
+}
+
+#get-started:hover,
+#services:hover {
     background-color: var(--primary-hover);
     color: var(--on-image);
 }
@@ -293,7 +307,10 @@ body {
     width: fit-content;
 }
 
+
+
 /* ============ RESPONSIVE ============ */
+
 @media (max-width: 768px) {
 
     .header-content {
@@ -305,7 +322,10 @@ body {
     }
 
     .navigations {
-        gap: 50px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
     }
 
     .navigations #get-started {
@@ -317,6 +337,57 @@ body {
 
     .navigations a:not(#get-started) {
         display: none;
+    }
+
+    /* Vertical dropdown */
+
+    .navigations.active {
+        position: fixed;
+        top: 90px;
+        right: 20px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+
+        min-width: 180px;
+        padding: 8px 0;
+
+        background: var(--surface-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+
+        z-index: 1000;
+    }
+
+
+    .navigations.active a:not(#get-started) {
+        display: block;
+        width: 100%;
+        padding: 12px 18px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: var(--primary-text);
+        text-decoration: none;
+        background: transparent;
+        border-bottom: 1px solid var(--border);
+        transition: background-color 0.3s ease,
+            color 0.3s ease,
+            padding-left 0.3s ease;
+    }
+
+    .navigations.active a:not(#get-started):hover {
+        color: var(--primary-color);
+        background-color: var(--background);
+        padding-left: 24px;
+    }
+
+    /* Keep Get Started beside the hamburger */
+    .navigations #get-started {
+        display: block;
     }
 
     #menu-icon {
@@ -335,6 +406,7 @@ body {
         padding: 20px 25px;
     }
 }
+
 
 @media (max-width: 500px) {
 

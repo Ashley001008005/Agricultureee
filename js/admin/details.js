@@ -1,4 +1,4 @@
-import { h, badge, fmtDate, toast, ROLE } from './ui.js';
+import { h, badge, fmtDate, toast, ROLE, presence, lastLogin } from './ui.js';
 import { getApplicantDetails, listDocuments, getDocumentUrl } from './api.js';
 
 const field = ([label, value]) =>
@@ -48,6 +48,7 @@ export function openDetails(app, onDecide) {
             ['Residential address', app.residential_address],
             ['Role', ROLE[app.role]?.label.slice(0, -1) ?? app.role],
             ['Status', badge(app.status)], ['Date submitted', fmtDate(app.joined)],
+            ['Last login', lastLogin(app)], ['Presence', presence(app)],
         ].map(field)),
         h('h3', {}, 'Additional information'), extra,
         h('h3', {}, 'Registration documents'), docs,

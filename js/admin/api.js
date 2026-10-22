@@ -58,9 +58,9 @@ export async function setUserStatus(user, status) {
 
 // --- Applicant details (role-specific tables) -------------------------------
 const ROLE_DETAILS = {
-    farmer: { table: 'farmer_details', fields: [['Farm name', 'farm_name'], ['Farm location', 'farm_location']], link: ['farmer_crops', 'Main crops grown'] },
+    farmer: { table: 'farmer_details', fields: [['Business name', 'farm_name'], ['Business address', 'farm_location']], link: ['farmer_crops', 'Supplied products and crops grown'] },
     buyer: { table: 'buyer_details', fields: [['Buyer type', 'buyer_type'], ['Business name', 'business_name']], link: ['buyer_interests', 'Interested products'] },
-    supplier: { table: 'supplier_details', fields: [['Business name', 'business_name'], ['Business address', 'business_address']], link: ['supplier_products', 'Supplied products'] },
+    supplier: { table: 'supplier_details', fields: [['Business name', 'business_name'], ['Business address', 'business_address']], link: ['supplier_products', 'Supplied products and crops grown'] },
 };
 
 export async function getApplicantDetails(app) {
@@ -68,7 +68,7 @@ export async function getApplicantDetails(app) {
     if (!cfg) return [];
 
     const { data, error } = await supabase
-        .from(cfg.table).select(cfg.fields.map(([, k]) => k).join(', ')).eq('user_id', app.id).maybeSingle();
+        .from(cfg.table).select(cfg.fields.map(([, k]) => k).join(', ') + (app.role === 'farmer' ? ', crops' : '')).eq('user_id', app.id).maybeSingle();
     if (error) throw error;
 
     const [linkTable, linkLabel] = cfg.link;
@@ -83,7 +83,10 @@ export async function getApplicantDetails(app) {
         names = (products ?? []).map((p) => p.product_name);
     }
 
-    return [...cfg.fields.map(([label, key]) => [label, data?.[key]]), [linkLabel, names.join(', ') || 'None listed']];
+    // Farmers also keep their crops (including custom "Other" crops) in farmer_details.crops.
+    const all = [...new Set([...names, ...(Array.isArray(data?.crops) ? data.crops : [])])];
+
+    return [...cfg.fields.map(([label, key]) => [label, data?.[key]]), [linkLabel, all.join(', ') || 'None listed']];
 }
 
 // --- Registration documents (private, via Edge Function) --------------------

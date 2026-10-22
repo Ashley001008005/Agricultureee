@@ -41,6 +41,12 @@ export const fmtDateTime = (iso) =>
 
 export const badge = (status) => h('span', { class: `badge ${status}` }, STATUS[status]?.label ?? status);
 
+// Online/offline pill (reuses the existing green "active" and grey "rejected" badge colours).
+export const presence = (u) =>
+    h('span', { class: `badge ${u.online ? 'active' : 'rejected'}` }, u.online ? 'Online' : 'Offline');
+
+export const lastLogin = (u) => (u.last_login ? fmtDateTime(u.last_login) : 'Never');
+
 export const person = (u) =>
     h('div', { class: 'person' },
         h('span', { class: 'avatar' }, u.name.split(' ').map((p) => p[0]).slice(0, 2).join('')),

@@ -1,5 +1,4 @@
 :root {
-
     color-scheme: light;
     --space-xs: 8px;
     --space-sm: 12px;
@@ -18,14 +17,14 @@
     --swap-time: 0.65s;
 }
 
-/* ============ DARK THEME (set by the toggle) ============ */
-/* :root[data-theme] outranks the :root in style.css, so load order doesn't matter */
+/* ============ DARK THEME ============ */
 :root[data-theme="dark"] {
     color-scheme: dark;
 
     --primary-color: var(--primary-color-dm);
     --primary-hover: var(--primary-hover-dm);
     --secondary: var(--secondary-dm);
+    --logo: var(--logo-dm);
     --secondary-hover: var(--secondary-hover-dm);
     --background: var(--background-dm);
     --surface-card: var(--surface-card-dm);
@@ -37,172 +36,22 @@
     --error: var(--error-dm);
 }
 
-/* Lighter dropdown arrow so it stays visible on dark inputs */
+/* Dark mode dropdown arrow */
 :root[data-theme="dark"] .input-wrap select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23B8AEA2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
 }
 
-/* ============ THEME TOGGLE ============ */
-.topbar-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-}
-
-.theme-toggle {
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    color: var(--primary-text);
-    background-color: var(--surface-card);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.theme-toggle:hover {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.theme-toggle:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-}
-
-/* Show the moon in light mode, the sun in dark mode */
-.theme-toggle .icon-sun {
-    display: none;
-}
-
-:root[data-theme="dark"] .theme-toggle .icon-moon {
-    display: none;
-}
-
-:root[data-theme="dark"] .theme-toggle .icon-sun {
-    display: block;
-}
-
+/* ============ GENERAL ============ */
 body {
-    font-family: "Inter", sans-serif;
-    background: var(--background);
-    color: var(--text);
-    line-height: 1.5;
-}
-
-[hidden] {
-    display: none !important;
-}
-
-.section-heading {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 24px;
-    padding-bottom: 13px;
-    border-bottom: 1px solid var(--border);
-}
-
-.section-number {
-    width: 34px;
-    height: 34px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: #F6E8DF;
-    color: var(--terracotta);
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.section-heading h3 {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.section-heading p {
-    margin: 4px 0 0;
-    color: var(--muted);
-    font-size: 10px;
-}
-
-.role-section {
-    animation: fadeUp 0.35s ease both;
-}
-
-.document-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 16px;
-    padding: 15px;
-    border: 1px dashed #D8D0C2;
-    border-radius: 11px;
-    background: #FDFBF7;
-    transition: border-color 0.2s ease,
-                background 0.2s ease;
-}
-
-.document-field:focus-within {
-    border-color: var(--sage-dark);
-    background: #F7F8F0;
-}
-
-.document-field label {
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 1.7;
-}
-
-.document-field input[type="file"] {
-    width: 100%;
-    max-width: 100%;
-    color: var(--muted);
-    font-size: 10px;
-}
-
-.document-field input[type="file"]::file-selector-button {
-    padding: 9px 12px;
-    margin-right: 10px;
-    border: 0;
-    border-radius: 7px;
-    background: #E9EDDF;
-    color: #526444;
-    font-family: inherit;
-    font-size: 10px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.document-field small {
-    color: var(--muted);
-    font-size: 9px;
-    line-height: 1.6;
-}
-
-.input-group input,
-.input-group select {
-    flex: 1;
-}
-
-.role-section .input-group {
-    margin-top: 16px;
-}
-
-
-[hidden] {
-    display: none !important;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: var(--fs-md);
+    background: var(--background);
+    color: var(--primary-text);
     line-height: 1.5;
+}
+
+[hidden] {
+    display: none !important;
 }
 
 /* ============ TOPBAR ============ */
@@ -223,7 +72,6 @@ body {
     text-decoration: none;
 }
 
-/* overrides the white logo from style.css (higher specificity) */
 .topbar .logo {
     gap: var(--space-xs);
 }
@@ -253,22 +101,24 @@ body {
     color: var(--primary-hover);
 }
 
-/* ============ PAGE LAYOUT (form left, image right) ============ */
+/* ============ PAGE LAYOUT ============ */
+/* Signup: form left, image right */
 .page-layout {
     --shift: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "form image";
     min-height: calc(100vh - var(--topbar-h));
-    overflow-x: clip; /* clip keeps position: sticky working */
+    overflow-x: clip;
 }
 
-/* Use on login.html so the layout is mirrored: image left, form right */
+/* Login: image left, form right */
 .page-layout--login {
     --shift: -100%;
     grid-template-areas: "image form";
 }
 
+/* ============ SIGNUP FORM ============ */
 #signupForm {
     grid-area: form;
     width: 100%;
@@ -279,7 +129,7 @@ body {
     flex-direction: column;
     gap: var(--space-md);
     transition: transform var(--swap-time) cubic-bezier(0.77, 0, 0.175, 1),
-                opacity var(--swap-time) ease;
+        opacity var(--swap-time) ease;
 }
 
 /* ============ IMAGE PANEL ============ */
@@ -292,17 +142,49 @@ body {
     transition: transform var(--swap-time) cubic-bezier(0.77, 0, 0.175, 1);
 }
 
+/* Base image styling */
 .image-panel__img {
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 20px;
     position: absolute;
     padding: 10px;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 96%;
     object-fit: cover;
     object-position: center;
     filter: brightness(55%);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease,
+        transform 0.3s ease;
 }
 
+/* Dark mode — glowing orange border */
+:root[data-theme="dark"] .image-panel__img {
+    border-color: #ff8c32;
+    box-shadow:
+        0 0 6px #ff8c32,
+        0 0 14px rgba(255, 140, 50, 0.65),
+        0 0 28px rgba(255, 100, 20, 0.35);
+}
+
+/* Light mode — subtle theme-based border */
+:root:not([data-theme="dark"]) .image-panel__img {
+    border-color: var(--border);
+    box-shadow: 0 0 10px rgba(140, 95, 40, 0.12);
+}
+
+/* Signup — move image to the left */
+.page-layout:not(.page-layout--login) .image-panel__img {
+    transform: translateX(20px);
+}
+
+/* Login — move image to the right */
+.page-layout--login .image-panel__img {
+    transform: translateX(30px);
+}
+
+/* Image overlay text */
 .image-panel__overlay {
     position: relative;
     z-index: 2;
@@ -312,11 +194,10 @@ body {
     justify-content: flex-end;
     gap: var(--space-sm);
     padding: var(--space-xl);
-    
 }
 
 .image-panel__overlay h2 {
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
     font-size: var(--fs-xl);
     font-weight: 500;
     color: #FFFFFF;
@@ -349,7 +230,7 @@ body {
 }
 
 .section-heading h3 {
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
     font-size: var(--fs-lg);
     font-weight: 500;
 }
@@ -401,6 +282,7 @@ body {
 
 .input-wrap input,
 .input-wrap select {
+    box-sizing: border-box;
     width: 100%;
     padding: var(--space-sm) var(--space-md);
     font-family: inherit;
@@ -452,6 +334,7 @@ body {
 }
 
 .document-field input[type="file"] {
+    max-width: 100%;
     font-family: inherit;
     font-size: var(--fs-sm);
     color: var(--secondary-text);
@@ -565,7 +448,9 @@ body {
     align-items: flex-start;
     gap: var(--space-sm);
     padding: var(--space-md);
-    background-color: color-mix(in srgb, var(--warning) 12%, var(--surface-card));
+    background-color: color-mix(in srgb,
+            var(--warning) 12%,
+            var(--surface-card));
     border: 1px solid var(--warning);
     border-radius: var(--radius);
     font-size: var(--fs-sm);
@@ -584,6 +469,7 @@ body {
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 900px) {
+
     .page-layout,
     .page-layout--login {
         grid-template-columns: 1fr;

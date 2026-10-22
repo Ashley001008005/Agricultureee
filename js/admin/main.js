@@ -7,6 +7,7 @@ const TITLES = {
     users: 'Users',
     audit: 'Audit logs',
     settings: 'Settings',
+    staff: 'Staff accounts',
 };
 
 const root = document.getElementById('view');
