@@ -1,15 +1,15 @@
-
-const KEY = 'tanikala-theme';
+const KEY = 'theme';
+const OLD_KEY = 'tanikala-theme';
 const root = document.documentElement;
 
 function getSaved() {
     try {
-        return localStorage.getItem(KEY);
+        // Use the shared key, and fall back to the old one so nobody loses their saved choice.
+        return localStorage.getItem(KEY) || localStorage.getItem(OLD_KEY);
     } catch {
         return null;
     }
 }
-
 function save(theme) {
     try {
         localStorage.setItem(KEY, theme);

@@ -134,7 +134,7 @@ async function getApprovedDestination(userId) {
         throw new Error("Unable to check your administrator account.");
     }
 
-    if (admin) return "./admin-dashboard.html";
+    if (admin) return "./pages/admin-dashboard.html";
 
     // 2. Check staff accounts using the Supabase Auth UUID.
     const { data: staff, error: staffError } = await supabase
@@ -173,11 +173,11 @@ async function getApprovedDestination(userId) {
         }
 
         const staffRolePages = {
-            "Farm Manager": "./farm-manager-dashboard.html",
-            "Warehouse Officer": "./warehouse-officer-dashboard.html",
-            "Agricultural Technician": "./agricultural-technician-dashboard.html",
-            "Accountant": "./accountant-dashboard.html",
-            "Admin": "./admin-dashboard.html"
+            "Farm Manager": "./pages/farm-manager-dashboard.html",
+            "Warehouse Officer": "./pages/warehouse-officer-dashboard.html",
+            "Agricultural Technician": "./pages/agricultural-technician-dashboard.html",
+            "Accountant": "./pages/accountant-dashboard.html",
+            "Admin": "./pages/admin-dashboard.html"
         };
 
         const destination = staffRolePages[role.role_name];
@@ -227,9 +227,9 @@ async function getApprovedDestination(userId) {
     }
 
     const rolePages = {
-        farmer: "./farmer-dashboard.html",
-        buyer: "./buyer-dashboard.html",
-        supplier: "./supplier-dashboard.html"
+        farmer: "./pages/farmer-dashboard.html",
+        buyer: "./pages/buyer-dashboard.html",
+        supplier: "./pages/supplier-dashboard.html"
     };
 
     const destination = rolePages[profile.role];

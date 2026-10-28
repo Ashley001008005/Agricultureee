@@ -1,0 +1,720 @@
+/* ============================================================
+   Farm Manager additions
+   Reuses tokens from style.css and admin-dash.css.
+   ============================================================ */
+:root {
+    --fm-tint: var(--mint, var(--background));
+    --fm-muted: var(--muted, var(--secondary-text));
+    --fm-accent: var(--primary, var(--primary-color));
+}
+
+/* ============ LAYOUT ============ */
+.fm-stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 2.5vw, 30px);
+}
+
+.fm-stack > .btn {
+    align-self: flex-start;
+}
+
+.fm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: clamp(20px, 2.5vw, 30px);
+}
+
+.fm-tiles {
+    margin-bottom: 14px;
+}
+
+/* ============ FARM CARD (photo on top, details card at the bottom) ============ */
+.fm-hero {
+    min-height: 320px;
+    background: var(--fm-tint);
+    border: 1px solid var(--border);
+}
+
+.fm-hero .fm-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fm-hero .hero-card {
+    position: relative;
+    border: 1px solid var(--border);
+}
+
+.fm-hero .hero-head small {
+    display: block;
+}
+
+/* Default state: no image (null cover_image_path) */
+.hero--empty {
+    background: var(--fm-tint);
+}
+
+.fm-cover-empty {
+    position: absolute;
+    inset: 0 0 auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: calc(100% - 170px);
+    min-height: 110px;
+    color: var(--fm-muted);
+}
+
+.fm-leaf {
+    display: grid;
+    place-items: center;
+    color: var(--fm-accent);
+}
+
+.fm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* ============ "MY ASSIGNED FARMS" ROWS ON THE DASHBOARD ============ */
+.card .fm-muni {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    color: var(--primary-text);
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.card .fm-muni > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.card .fm-muni small {
+    color: var(--fm-muted);
+    font-size: var(--fs-xs);
+}
+
+.card .fm-muni b {
+    font-size: var(--fs-lg);
+    overflow-wrap: anywhere;
+}
+
+.fm-action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    margin-top: 16px;
+}
+
+.fm-action-grid .btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+}
+
+/* ============================================================
+   CROP MANAGEMENT
+   ============================================================ */
+.crop-page {
+    --crop-radius: var(--radius);
+    --crop-planned: var(--warning);
+    --crop-planted: var(--secondary);
+    --crop-growing: var(--success);
+    --crop-ready: var(--primary-color);
+    --crop-harvested: var(--secondary-hover);
+    --crop-onhold: var(--secondary-text);
+    --crop-failed: var(--error);
+    --crop-cancelled: var(--secondary-text);
+
+    display: grid;
+    gap: var(--space-md);
+    font-family: 'Poppins', system-ui, sans-serif;
+    color: var(--primary-text);
+}
+
+.crop-page h2 {
+    font-family: 'Outfit', 'Poppins', sans-serif;
+    font-size: var(--fs-lg);
+    font-weight: 500;
+    color: var(--primary-text);
+}
+
+.crop-page .muted {
+    color: var(--secondary-text);
+    font-size: var(--fs-sm);
+}
+
+/* ---------- Info chips (municipality + counts) ---------- */
+.crop-location-note,
+.crop-counts {
+    display: inline-block;
+    width: fit-content;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-card);
+    font-size: var(--fs-xs);
+}
+
+.crop-location-note {
+    color: var(--primary-color);
+    font-weight: 600;
+    border-color: color-mix(in srgb, var(--primary-color) 40%, var(--border));
+}
+
+/* ---------- Cards ---------- */
+.crop-page .card {
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: var(--crop-radius);
+    background: var(--surface-card);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.crop-page .card-head {
+    display: grid;
+    gap: 0.25rem;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border);
+}
+
+/* ---------- Form ---------- */
+.crop-form {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.crop-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-md);
+}
+
+.crop-form-group {
+    display: grid;
+    gap: 0.45rem;
+    min-width: 0;
+}
+
+.crop-form-full {
+    grid-column: 1 / -1;
+}
+
+.crop-form-group label {
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--primary-text);
+}
+
+.crop-input,
+.crop-select {
+    width: 100%;
+    min-width: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--crop-radius);
+    background: var(--background);
+    color: var(--primary-text);
+    font: inherit;
+    font-size: var(--fs-md);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease,
+        background-color 0.3s ease;
+}
+
+.crop-input::placeholder {
+    color: var(--secondary-text);
+}
+
+textarea.crop-input {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.crop-input:focus,
+.crop-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 25%, transparent);
+}
+
+.crop-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Select arrow (same style as .input-wrap select) */
+.crop-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.25rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23706860' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 12px 8px;
+    cursor: pointer;
+}
+
+:root[data-theme="dark"] .crop-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23B8AEA2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+.crop-form-message {
+    min-height: 1.2em;
+    color: var(--error);
+}
+
+.crop-form-message:empty {
+    display: none;
+}
+
+/* ---------- Buttons ---------- */
+.crop-form .btn {
+    width: fit-content;
+    padding: 0.75rem 1.6rem;
+    border: 0;
+    border-radius: var(--crop-radius);
+    background: var(--primary-color);
+    color: var(--on-image);
+    font: inherit;
+    font-size: var(--fs-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.15s ease;
+}
+
+.crop-form .btn:hover:not(:disabled) {
+    background: var(--primary-hover);
+}
+
+.crop-form .btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.crop-form .btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.crop-form .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.crop-page .btn.ghost {
+    width: fit-content;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--crop-radius);
+    background: transparent;
+    color: var(--primary-text);
+    font: inherit;
+    cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.crop-page .btn.ghost:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.crop-page .msg.error {
+    color: var(--error);
+    font-weight: 500;
+}
+
+/* ---------- Table ---------- */
+.crop-page .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.crop-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--fs-sm);
+}
+
+.crop-table th,
+.crop-table td {
+    padding: 0.85rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.crop-table th {
+    font-family: 'Outfit', 'Poppins', sans-serif;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--secondary-text);
+    background: var(--background);
+}
+
+.crop-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.crop-table tbody tr:hover {
+    background: color-mix(in srgb, var(--primary-color) 6%, transparent);
+}
+
+.crop-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+/* ---------- Status badges ---------- */
+.crop-status {
+    --status-color: var(--secondary-text);
+
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--status-color);
+    background: color-mix(in srgb, var(--status-color) 15%, transparent);
+}
+
+.crop-status--planned   { --status-color: var(--crop-planned); }
+.crop-status--planted   { --status-color: var(--crop-planted); }
+.crop-status--growing   { --status-color: var(--crop-growing); }
+.crop-status--ready     { --status-color: var(--crop-ready); }
+.crop-status--harvested { --status-color: var(--crop-harvested); }
+.crop-status--on_hold   { --status-color: var(--crop-onhold); }
+.crop-status--failed    { --status-color: var(--crop-failed); }
+.crop-status--cancelled { --status-color: var(--crop-cancelled); }
+
+/* ============================================================
+   CROP PICKER
+   The trigger selectors are deliberately more specific
+   (.crop-picker button.crop-picker-trigger) so that generic
+   button / select rules in admin-dash.css cannot paint their
+   own tiled arrow background over it.
+   ============================================================ */
+.crop-picker {
+    position: relative;
+    min-width: 0;
+}
+
+.crop-picker button.crop-picker-trigger {
+    display: flex;
+    width: 100%;
+    min-height: 46px;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--background);
+    background-image: none;
+    background-repeat: no-repeat;
+    color: var(--primary-text);
+    font: inherit;
+    font-size: var(--fs-md);
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease,
+        background-color 0.3s ease, color 0.3s ease;
+}
+
+/* The only arrow: a chevron drawn by ::after.
+   Do NOT also put a ▾ / ▼ character inside the button in JS. */
+.crop-picker button.crop-picker-trigger::after {
+    content: "";
+    flex: 0 0 auto;
+    width: 12px;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23706860' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 8px;
+    transition: transform 0.3s ease;
+}
+
+:root[data-theme="dark"] .crop-picker button.crop-picker-trigger::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23B8AEA2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+.crop-picker button.crop-picker-trigger[aria-expanded="true"]::after {
+    transform: rotate(180deg);
+}
+
+.crop-picker button.crop-picker-trigger:hover {
+    border-color: var(--secondary);
+}
+
+.crop-picker button.crop-picker-trigger:focus-visible,
+.crop-picker button.crop-picker-trigger[aria-expanded="true"] {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 25%, transparent);
+}
+
+.crop-picker button.crop-picker-trigger:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Placeholder text when nothing is selected */
+.crop-picker-trigger .placeholder,
+.crop-picker-trigger[data-empty="true"] {
+    color: var(--secondary-text);
+}
+
+/* ---------- Dropdown ---------- */
+.crop-picker-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 100;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface-card);
+    color: var(--primary-text);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.crop-picker-dropdown[hidden] {
+    display: none;
+}
+
+/* ---------- Options ---------- */
+.crop-picker-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 10px 12px;
+    border-radius: calc(var(--radius) - 2px);
+    font-size: var(--fs-sm);
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.crop-picker-option:hover {
+    background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+}
+
+.crop-picker-option:has(input:checked) {
+    background: color-mix(in srgb, var(--primary-color) 14%, transparent);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.crop-picker-option input {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--primary-color);
+}
+
+.crop-picker-option input:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Empty state, e.g. "Walang crop na nahanap" */
+.crop-picker-empty {
+    padding: 10px 12px;
+    font-size: var(--fs-sm);
+    color: var(--secondary-text);
+}
+
+/* ============================================================
+   SIDEBAR THEME
+   Colors only. Width, position and layout are left to
+   admin-dash.css so this cannot break the page layout.
+   Light mode = orange, dark mode = dark surface.
+   ============================================================ */
+
+/* ---------- Dark mode ---------- */
+:root[data-theme="dark"] .sidebar {
+    background: var(--surface-card);
+    border-right: 1px solid var(--border);
+    color: var(--primary-text);
+    transition: background-color 0.3s ease, border-color 0.3s ease,
+        color 0.3s ease;
+}
+
+:root[data-theme="dark"] .sidebar :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *) {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: var(--secondary-text);
+    transition: background-color 0.3s ease, color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+:root[data-theme="dark"] .sidebar :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *):hover {
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    color: var(--primary-text);
+}
+
+:root[data-theme="dark"] .sidebar :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *).active,
+:root[data-theme="dark"] .sidebar :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *)[aria-current="page"],
+:root[data-theme="dark"] .sidebar :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *)[aria-selected="true"] {
+    background: color-mix(in srgb, var(--primary-color) 16%, transparent);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+:root[data-theme="dark"] .sidebar :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *):focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:root[data-theme="dark"] .sidebar .sidebar-label {
+    color: var(--secondary-text);
+}
+
+:root[data-theme="dark"] .sidebar .sidebar-footer :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *),
+:root[data-theme="dark"] .sidebar [class*="logout" i] {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--primary-text);
+}
+
+:root[data-theme="dark"] .sidebar .sidebar-footer :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *):hover,
+:root[data-theme="dark"] .sidebar [class*="logout" i]:hover {
+    background: color-mix(in srgb, var(--error) 12%, transparent);
+    border-color: var(--error);
+    color: var(--error);
+}
+
+/* ---------- Light mode: orange ----------
+   The active item (Harvest) is excluded on purpose, so it keeps
+   its original look (white box, orange text) from admin-dash.css. */
+:root:not([data-theme="dark"]) .sidebar {
+    background: var(--primary-color);
+    border-right-color: color-mix(in srgb, var(--primary-hover) 35%, transparent);
+    color: var(--on-image);
+}
+
+/* The "Tanikala" name/logo is intentionally NOT styled here,
+   so it keeps its original color. */
+
+:root:not([data-theme="dark"]) .sidebar .sidebar-label {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Non-active links only: no white boxes, white text */
+:root:not([data-theme="dark"]) .sidebar :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *):not(.active, .is-active, .current, .selected, [aria-current], [aria-selected="true"]) {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+:root:not([data-theme="dark"]) .sidebar :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *):not(.active, .is-active, .current, .selected, [aria-current], [aria-selected="true"]):hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--on-image);
+}
+
+/* Footer / log out: white outline instead of grey */
+:root:not([data-theme="dark"]) .sidebar .sidebar-footer {
+    border-top-color: rgba(255, 255, 255, 0.25);
+}
+
+:root:not([data-theme="dark"]) .sidebar .sidebar-footer :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *),
+:root:not([data-theme="dark"]) .sidebar [class*="logout" i] {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    color: var(--on-image);
+}
+
+:root:not([data-theme="dark"]) .sidebar .sidebar-footer :is(a, button):not([class*="logo" i], [class*="brand" i], [class*="logo" i] *, [class*="brand" i] *):hover,
+:root:not([data-theme="dark"]) .sidebar [class*="logout" i]:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: var(--on-image);
+}
+
+/* ============================================================
+   GLASS EFFECT ON FARM CARDS
+   ============================================================ */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .fm-hero .hero-card {
+        background: color-mix(in srgb, var(--surface-card) 55%, transparent);
+        border-color: color-mix(in srgb, var(--on-image, #fff) 28%, transparent);
+        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        backdrop-filter: blur(14px) saturate(140%);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    /* The three boxes (Crop health, Sowing date, Harvest date) become glass too */
+    .fm-hero .hero-card .stat-box {
+        background: color-mix(in srgb, var(--surface-card) 35%, transparent);
+        border-color: color-mix(in srgb, var(--on-image, #fff) 20%, transparent);
+    }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 700px) {
+    .crop-form-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .crop-form-full {
+        grid-column: auto;
+    }
+
+    .crop-form .btn {
+        width: 100%;
+    }
+
+    .crop-page .card {
+        padding: var(--space-sm);
+    }
+}
+
+@media (max-width: 560px) {
+    .fm-hero {
+        min-height: 360px;
+    }
+
+    .fm-actions {
+        width: 100%;
+    }
+
+    .fm-actions .btn {
+        flex: 1 1 0;
+    }
+}

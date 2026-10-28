@@ -1,5 +1,5 @@
 
-import { supabase } from "./connection.js";
+import { supabase } from "../connection.js";
 
 const logoutButton = document.getElementById("logoutButton");
 const refreshButton = document.getElementById("refreshApplications");
@@ -110,46 +110,44 @@ async function showApplicationDetails(app) {
         // Load role-specific details.
         addHeading("Additional Information");
 
+
         if (app.role === "farmer") {
-            const { data, error } = await supabase
-                .from("farmer_details")
-                .select("farm_name, farm_location")
-                .eq("user_id", app.id)
-                .maybeSingle();
+            const { data: farms, error: farmsError } = await supabase
+                .from("farmer_farms")
+                .select("id, farm_name, farm_location")
+                .eq("farmer_id", app.id)
+                .order("created_at", { ascending: true });
 
-            if (error) throw error;
+            if (farmsError) throw farmsError;
 
-            addField("Farm name", data?.farm_name);
-            addField("Farm location", data?.farm_location);
-
-            const { data: crops, error: cropsError } = await supabase
-                .from("farmer_crops")
-                .select("product_id")
-                .eq("user_id", app.id);
-
-            if (cropsError) throw cropsError;
-
-            const cropIds = [...new Set(
-                (crops ?? []).map(item => item.product_id)
-            )];
-
-            let cropNames = [];
-
-            if (cropIds.length) {
-                const { data: products, error: productsError } =
-                    await supabase
-                        .from("products")
-                        .select("id, product_name")
-                        .in("id", cropIds);
-
-                if (productsError) throw productsError;
-
-                cropNames = (products ?? []).map(p => p.product_name);
+            if (!farms?.length) {
+                addField("Farm name", "None listed");
+                addField("Farm location", "None listed");
+                addField("Crops grown", "None listed");
             }
 
-            addField("Main crops grown", cropNames.join(", ") || "None listed");
+            for (const farm of farms ?? []) {
+                addHeading(`Farm: ${farm.farm_name}`);
 
-        } else if (app.role === "buyer") {
+                addField("Farm name", farm.farm_name);
+                addField("Farm location", farm.farm_location);
+
+                const { data: crops, error: cropsError } = await supabase
+                    .from("farmer_farm_crops")
+                    .select("crop_name")
+                    .eq("farm_id", farm.id)
+                    .order("crop_name", { ascending: true });
+
+                if (cropsError) throw cropsError;
+
+                addField(
+                    "Crops grown",
+                    (crops ?? []).map(crop => crop.crop_name).join(", ") ||
+                    "None listed"
+                );
+            }
+        }
+        else if (app.role === "buyer") {
             const { data, error } = await supabase
                 .from("buyer_details")
                 .select("buyer_type, business_name")

@@ -6,17 +6,48 @@ export async function render(root, ctx) {
     const filter = { role: 'all', status: 'pending' };
     const holder = h('div');
 
+
     const decide = async (user, status) => {
+        let reason = '';
+
+        if (status === 'rejected') {
+            const enteredReason = window.prompt(
+                `Why is ${user.name}'s application being rejected?\n\n` +
+                'Explain what information or documents need correction.'
+            );
+
+            // Cancel was clicked.
+            if (enteredReason === null) return;
+
+            reason = enteredReason.trim();
+
+            if (!reason) {
+                toast('A rejection reason is required.');
+                return;
+            }
+        }
+
         try {
-            await setUserStatus(user, status);
-            toast(`${status === 'active' ? 'Approved' : 'Rejected'} ${user.name}`);
+            const result = await setUserStatus(user, status);
+
+            if (status === 'active') {
+                toast(`Approved ${user.name}`);
+            } else {
+                toast(
+                    result.emailSent
+                        ? `Rejected ${user.name}. Email sent.`
+                        : `Rejected ${user.name}, but the email was not sent.`
+                );
+            }
+
             await draw();
             ctx.refreshBadge();
         } catch (err) {
             console.error('Could not update application:', err);
-            toast('Could not update this application. Check Supabase permissions.');
+            toast(err.message || 'Could not update this application.');
         }
     };
+
 
     const draw = async () => {
         try {
