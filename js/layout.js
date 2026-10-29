@@ -1,4 +1,3 @@
-
 const layout = document.querySelector(".page-layout");
 
 // Page transition links
@@ -26,8 +25,14 @@ document.querySelectorAll(".topbar-text a").forEach((link) => {
 });
 
 // Password visibility toggles
+// Each click is handled once. If another script also listens on the same
+// button (or an old cached copy of it does), the second handler sees the flag
+// and does nothing, so the field is never flipped twice.
 document.querySelectorAll(".password-toggle").forEach((toggle) => {
-    toggle.addEventListener("click", () => {
+    toggle.addEventListener("click", (event) => {
+        if (event.passwordToggleHandled) return;
+        event.passwordToggleHandled = true;
+
         const input = document.getElementById(toggle.dataset.target);
 
         if (!input) return;

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,6 +16,7 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../css/signup.css">
+    <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="../css/crop-picker.css">
     <link rel="stylesheet" href="../css/style.css">
     <script type="module" src="../js/role.js"></script>
@@ -22,7 +24,6 @@
 
 <body>
     <header class="topbar">
-
         <a href="../index.html" class="brand">
             <div class="logo">
                 <h1>T<span>ani</span>kala</h1>
@@ -53,7 +54,6 @@
     </header>
 
     <main class="page-layout">
-
         <aside class="image-panel">
             <img src="../assets/hero-image.jpg" alt="Farm field at sunrise" class="image-panel__img">
             <div class="image-panel__overlay">
@@ -61,7 +61,6 @@
                 <p>Connect farmers, buyers, and suppliers in one trusted platform.</p>
             </div>
         </aside>
-
 
         <form id="signupForm">
             <!-- ACCOUNT INFORMATION -->
@@ -73,10 +72,46 @@
                 </div>
             </div>
 
-            <div class="input-group">
-                <label for="fullName">Full name</label>
-                <div class="input-wrap">
-                    <input type="text" id="fullName" required placeholder="Enter your full name" autocomplete="name">
+            <div class="name-row">
+                <div class="input-group">
+                    <label for="firstName">First name</label>
+                    <div class="input-wrap">
+                        <input type="text" id="firstName" required maxlength="60" placeholder="First name"
+                            autocomplete="given-name">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="middleName">Middle name</label>
+                    <div class="input-wrap">
+                        <input type="text" id="middleName" maxlength="60" placeholder="Middle name (optional)"
+                            autocomplete="additional-name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="name-row">
+                <div class="input-group">
+                    <label for="surname">Surname</label>
+                    <div class="input-wrap">
+                        <input type="text" id="surname" required maxlength="60" placeholder="Surname"
+                            autocomplete="family-name">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="suffix">Suffix</label>
+                    <div class="input-wrap">
+                        <select id="suffix">
+                            <option value="">None</option>
+                            <option value="Jr.">Jr.</option>
+                            <option value="Sr.">Sr.</option>
+                            <option value="II">II</option>
+                            <option value="III">III</option>
+                            <option value="IV">IV</option>
+                            <option value="V">V</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -102,22 +137,26 @@
             <div class="password-row">
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <div class="input-wrap">
-                        <input type="password" id="password" minlength="8" required placeholder="At least 8 characters"
-                            autocomplete="new-password">
+                    <div class="input-wrap input-wrap--password">
+                        <input type="password" id="password" minlength="12" required
+                            placeholder="At least 12 characters" autocomplete="new-password">
+                        <button type="button" class="password-toggle" data-target="password"
+                            aria-label="Show password">Show</button>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <label for="confirmPassword">Confirm passwords</label>
-                    <div class="input-wrap">
-                        <input type="password" id="confirmPassword" minlength="8" required placeholder="Repeat password"
-                            autocomplete="new-password">
+                    <div class="input-wrap input-wrap--password">
+                        <input type="password" id="confirmPassword" minlength="12" required
+                            placeholder="Repeat password" autocomplete="new-password">
+                        <button type="button" class="password-toggle" data-target="confirmPassword"
+                            aria-label="Show password">Show</button>
                     </div>
                 </div>
             </div>
 
-            <!-- PERSONAL INFORMATION: SHARED BY ALL ROLES -->
+            <!-- PERSONAL INFORMATION -->
             <div class="section-heading">
                 <span class="section-number">02</span>
                 <div>
@@ -146,193 +185,242 @@
                 <div class="section-heading">
                     <span class="section-number">03</span>
                     <div>
-                        <h3>Farm Information</h3>
-                        <p>Tell us about your farm</p>
+                        <h3>Farmer Information</h3>
+                        <p>Tell us about your farming arrangement</p>
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <label for="farmName">Farm name</label>
+                    <label for="farmerType">Farmer type</label>
                     <div class="input-wrap">
-                        <input type="text" id="farmName" data-required="true" placeholder="Enter your farm name">
+                        <select id="farmerType" data-required="true">
+                            <option value="" disabled selected>
+                                Select your farming arrangement
+                            </option>
+                            <option value="owner_operator">Farm Owner / Operator</option>
+                            <option value="tenant_lessee">Tenant / Lessee</option>
+                            <option value="hired_farmer">Hired Farmer</option>
+                        </select>
+                    </div>
+                    <div class="farm-location-reminder" id="farmerTypeReminder">
+                        <strong>Farm Owner Reminder</strong>
+                        <p>
+                            Owners/operators can register their farms.
+                            Tenants and hired farmers can register without owning a farm
+                            and may be assigned to an existing farm later.
+                        </p>
                     </div>
                 </div>
 
-                <div class="input-group">
-                    <label for="farmLocation">Farm location</label>
-                    <div class="input-wrap">
-                        <input type="text" id="farmLocation" data-required="true"
-                            placeholder="Barangay, city or municipality">
-                    </div>
-                </div>
-
-
-
-                <div class="input-group crop-picker-group">
-                    <label id="cropsLabel">Main Crops Grown</label>
-
-                    <p class="crop-hint">Select all crops you grow.</p>
-
-                    <div class="crop-picker" id="cropPicker">
-                        <button type="button" class="crop-picker-trigger" id="cropPickerTrigger" aria-expanded="false"
-                            aria-controls="cropPickerDropdown">
-                            <span id="cropPickerSummary">Choose your crops</span>
-                            <span class="crop-chevron" aria-hidden="true">⌄</span>
-                        </button>
-
-                        <div class="crop-picker-dropdown" id="cropPickerDropdown" hidden>
-                            <div class="crop-picker-heading">
-                                <span>Select crops</span>
-                            </div>
-
-                            <div class="crop-picker-options">
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Rice">
-                                    <span class="crop-radio"></span>
-                                    <span>Rice</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Corn">
-                                    <span class="crop-radio"></span>
-                                    <span>Corn</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Coconut">
-                                    <span class="crop-radio"></span>
-                                    <span>Coconut</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Banana">
-                                    <span class="crop-radio"></span>
-                                    <span>Banana</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Mango">
-                                    <span class="crop-radio"></span>
-                                    <span>Mango</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Pineapple">
-                                    <span class="crop-radio"></span>
-                                    <span>Pineapple</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Tomato">
-                                    <span class="crop-radio"></span>
-                                    <span>Tomato</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Eggplant">
-                                    <span class="crop-radio"></span>
-                                    <span>Eggplant</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Onion">
-                                    <span class="crop-radio"></span>
-                                    <span>Onion</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Garlic">
-                                    <span class="crop-radio"></span>
-                                    <span>Garlic</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Cabbage">
-                                    <span class="crop-radio"></span>
-                                    <span>Cabbage</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Carrot">
-                                    <span class="crop-radio"></span>
-                                    <span>Carrot</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Potato">
-                                    <span class="crop-radio"></span>
-                                    <span>Potato</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Sweet Potato">
-                                    <span class="crop-radio"></span>
-                                    <span>Sweet Potato</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Cassava">
-                                    <span class="crop-radio"></span>
-                                    <span>Cassava</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Sugarcane">
-                                    <span class="crop-radio"></span>
-                                    <span>Sugarcane</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Coffee">
-                                    <span class="crop-radio"></span>
-                                    <span>Coffee</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Cacao">
-                                    <span class="crop-radio"></span>
-                                    <span>Cacao</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Calamansi">
-                                    <span class="crop-radio"></span>
-                                    <span>Calamansi</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" name="crops" value="Peanut">
-                                    <span class="crop-radio"></span>
-                                    <span>Peanut</span>
-                                </label>
-
-                                <label class="crop-choice">
-                                    <input type="checkbox" id="otherCropCheckbox">
-                                    <span class="crop-radio"></span>
-                                    <span>Other crop</span>
-                                </label>
-
-                            </div>
-
-                            <div class="crop-picker-footer">
-                                <button type="button" id="clearCrops">Clear</button>
-                                <button type="button" id="doneCrops">Done</button>
-                            </div>
+                <!-- OWNER / OPERATOR FARM REGISTRATION -->
+                <div id="ownerOperatorFields" hidden>
+                    <div class="section-heading">
+                        <span class="section-number">03A</span>
+                        <div>
+                            <h3>Your Farms</h3>
+                            <p>Add each farm you own or operate</p>
                         </div>
                     </div>
 
-                    <div class="other-crop-field" id="otherCropField" hidden>
-                        <label for="otherCropInput">Specify other crops</label>
-                        <input type="text" id="otherCropInput" placeholder="e.g. Okra, Ampalaya, Ginger"
-                            autocomplete="off">
-                        <p class="crop-hint">
-                            Separate multiple crop names with commas.
+                    <div id="farmsContainer"></div>
+
+                    <button type="button" class="submit-button" id="addFarmButton">
+                        <span>+ Add Another Farm</span>
+                    </button>
+
+                    <div class="farm-location-reminder" id="ownerFarmReminder">
+                        <strong>Farming Arrangement Reminder</strong>
+                        <p>
+                            Provide the complete location of each farm, including the
+                            city or municipality and province.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TENANT / HIRED FARMER INFORMATION -->
+                <div id="nonOwnerFarmerNotice" hidden>
+                    <div class="farm-location-reminder">
+                        <strong>No farm registration required</strong>
+                        <p>
+                            You can continue without registering a farm under your
+                            name. After your account is approved, an authorized
+                            administrator can coordinate your assignment to an
+                            existing farm.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FARM FORM TEMPLATE -->
+            <template id="farmTemplate">
+                <div class="farm-entry">
+                    <div class="section-heading farm-entry-heading">
+                        <span class="section-number farm-entry-number">Farm</span>
+                        <div>
+                            <h3 class="farm-entry-title">Farm details</h3>
+                            <p>Farm name, location, and crops grown</p>
+                        </div>
+                        <button type="button" class="remove-farm-button" data-action="remove-farm"
+                            aria-label="Remove this farm">
+                            Remove
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label data-label="farm-name">Farm name</label>
+                        <div class="input-wrap">
+                            <input type="text" data-field="farmName" data-required="true" maxlength="120"
+                                placeholder="Enter your farm name">
+                        </div>
+                    </div>
+
+                    <!-- ADDED: FARM LOCATION INPUT -->
+                    <div class="input-group">
+                        <label data-label="farm-location">Farm location</label>
+                        <div class="input-wrap">
+                            <input
+                                type="text"
+                                data-field="farmLocation"
+                                data-required="true"
+                                maxlength="200"
+                                placeholder="City or municipality, province">
+                        </div>
+                    </div>
+
+                    <div class="farm-location-reminder" data-farm-location-reminder hidden>
+                        <strong>Farm Location Reminder</strong>
+                        <p>
+                            Please enter your complete farm location, including
+                            the city or municipality and province. Do not use
+                            abbreviations or incomplete locations.
+                        </p>
+                        <p class="location-example">
+                            <strong>Example:</strong> San Pedro, Laguna
+                        </p>
+                        <p class="location-incorrect">
+                            <strong>Incorrect:</strong> SPL, San Pedro
                         </p>
                     </div>
 
-                </div>
+                    <div class="input-group crop-picker-group">
+                        <label>Main Crops Grown</label>
+                        <p class="crop-hint">Select all crops grown on this farm.</p>
 
-            </section>
+                        <div class="crop-picker" data-component="crop-picker">
+                            <button type="button" class="crop-picker-trigger" data-action="toggle-crops"
+                                aria-expanded="false">
+                                <span data-field="cropSummary">Choose your crops</span>
+                                <span class="crop-chevron" aria-hidden="true">⌄</span>
+                            </button>
+
+                            <div class="crop-picker-dropdown" data-field="cropDropdown" hidden>
+                                <div class="crop-picker-heading">
+                                    <span>Select crops</span>
+                                </div>
+
+                                <div class="crop-picker-options">
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Rice" value="Rice">
+                                        <span class="crop-radio"></span><span>Rice</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Corn" value="Corn">
+                                        <span class="crop-radio"></span><span>Corn</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Coconut" value="Coconut">
+                                        <span class="crop-radio"></span><span>Coconut</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Banana" value="Banana">
+                                        <span class="crop-radio"></span><span>Banana</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Mango" value="Mango">
+                                        <span class="crop-radio"></span><span>Mango</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Pineapple" value="Pineapple">
+                                        <span class="crop-radio"></span><span>Pineapple</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Tomato" value="Tomato">
+                                        <span class="crop-radio"></span><span>Tomato</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Eggplant" value="Eggplant">
+                                        <span class="crop-radio"></span><span>Eggplant</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Onion" value="Onion">
+                                        <span class="crop-radio"></span><span>Onion</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Garlic" value="Garlic">
+                                        <span class="crop-radio"></span><span>Garlic</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Cabbage" value="Cabbage">
+                                        <span class="crop-radio"></span><span>Cabbage</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Carrot" value="Carrot">
+                                        <span class="crop-radio"></span><span>Carrot</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Potato" value="Potato">
+                                        <span class="crop-radio"></span><span>Potato</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Sweet Potato" value="Sweet Potato">
+                                        <span class="crop-radio"></span><span>Sweet Potato</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Cassava" value="Cassava">
+                                        <span class="crop-radio"></span><span>Cassava</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Sugarcane" value="Sugarcane">
+                                        <span class="crop-radio"></span><span>Sugarcane</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Coffee" value="Coffee">
+                                        <span class="crop-radio"></span><span>Coffee</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Cacao" value="Cacao">
+                                        <span class="crop-radio"></span><span>Cacao</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Calamansi" value="Calamansi">
+                                        <span class="crop-radio"></span><span>Calamansi</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-crop="Peanut" value="Peanut">
+                                        <span class="crop-radio"></span><span>Peanut</span>
+                                    </label>
+                                    <label class="crop-choice">
+                                        <input type="checkbox" data-action="other-crop-toggle">
+                                        <span class="crop-radio"></span><span>Other crop</span>
+                                    </label>
+                                </div>
+
+                                <div class="crop-picker-footer">
+                                    <button type="button" data-action="clear-crops">Clear</button>
+                                    <button type="button" data-action="done-crops">Done</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="other-crop-field" data-field="otherCropField" hidden>
+                            <label>Specify other crops</label>
+                            <input type="text" data-field="otherCropInput" placeholder="e.g. Okra, Ampalaya, Ginger"
+                                autocomplete="off">
+                            <p class="crop-hint">Separate multiple crop names with commas.</p>
+                        </div>
+                    </div>
+                </div>
+            </template>
 
             <!-- BUYER INFORMATION -->
             <section class="role-section" data-role="buyer" hidden>
@@ -407,13 +495,13 @@
                 </div>
             </section>
 
-            <!-- SUPPORTING DOCUMENTS -->
+            <!-- FARMER SUPPORTING DOCUMENTS -->
             <section class="role-section" data-role="farmer" hidden>
                 <div class="section-heading">
                     <span class="section-number">04</span>
                     <div>
                         <h3>Supporting Documents</h3>
-                        <p>Upload documents for farm verification</p>
+                        <p>Upload documents for identity and farm verification</p>
                     </div>
                 </div>
 
@@ -423,13 +511,19 @@
                     <small>JPG, PNG, or PDF · Maximum 5 MB</small>
                 </div>
 
-                <div class="document-field">
+                <div class="document-field" id="farmProofField" hidden>
                     <label for="farmProof">Proof of farm ownership or operation</label>
-                    <input type="file" id="farmProof" data-required="true" accept=".jpg,.jpeg,.png,.pdf">
+                    <input type="file" id="farmProof" accept=".jpg,.jpeg,.png,.pdf">
                     <small>Farm certification or another accepted proof</small>
                 </div>
+
+                <p class="crop-hint" id="farmerDocumentHint" hidden>
+                    Your identity will be verified first. Farm assignment or
+                    additional verification may be coordinated after registration.
+                </p>
             </section>
 
+            <!-- BUYER SUPPORTING DOCUMENTS -->
             <section class="role-section" data-role="buyer" hidden>
                 <div class="section-heading">
                     <span class="section-number">04</span>
@@ -440,7 +534,7 @@
                 </div>
 
                 <div class="document-field">
-                    <label for="buyerId">Valid government-issued ID </label>
+                    <label for="buyerId">Valid government-issued ID</label>
                     <input type="file" id="buyerId" data-required="true" accept=".jpg,.jpeg,.png,.pdf">
                     <small>JPG, PNG, or PDF · Maximum 5 MB</small>
                 </div>
@@ -452,6 +546,7 @@
                 </div>
             </section>
 
+            <!-- SUPPLIER SUPPORTING DOCUMENTS -->
             <section class="role-section" data-role="supplier" hidden>
                 <div class="section-heading">
                     <span class="section-number">04</span>
@@ -470,8 +565,10 @@
                 <div class="document-field">
                     <label for="supplierPermit">Business permit</label>
                     <input type="file" id="supplierPermit" data-required="true" accept=".jpg,.jpeg,.png,.pdf">
-                    <small>If not applicable, contact the administrator
-                        about acceptable alternatives.</small>
+                    <small>
+                        If not applicable, contact the administrator about
+                        acceptable alternatives.
+                    </small>
                 </div>
             </section>
 
@@ -498,12 +595,12 @@
                 </p>
             </div>
         </form>
-
     </main>
+
     <script src="../js/layout.js"></script>
     <script src="../js/theme.js"></script>
     <script type="module" src="../js/signup.js"></script>
-    <script src="../js/crop-picker.js"></script>
 </body>
 
 </html>
+```

@@ -1,8 +1,25 @@
-/* Staff Account Management. Uses Tanikala's existing theme variables, so light/dark follow the site. */
+/* Staff action buttons: 2 columns × 2 rows */
+.actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.actions .btn {
+    width: 100%;
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
+    justify-content: center;
+}
+
 .staff-search,
 .staff-form input,
 .staff-form select,
 .staff-inline-role {
+    box-sizing: border-box;
     font: inherit;
     color: var(--text);
     background: transparent;
@@ -83,4 +100,300 @@
 .badge.staff-deleted {
     background: color-mix(in srgb, gray 25%, transparent);
     color: inherit;
+}
+
+.password-field {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+}
+
+.password-field input {
+    flex: 1;
+    min-width: 0;
+}
+
+.password-toggle {
+    flex-shrink: 0;
+    padding: 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.password-toggle:hover {
+    background: var(--surface-hover, var(--surface));
+    border-color: var(--primary-color);
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.password-toggle:active {
+    opacity: 0.8;
+}
+
+dialog#staff-details-modal {
+    --details-bg: #F8F4EC;
+    --details-surface: #FFFFFF;
+    --details-text: #181614;
+    --details-muted: #81786B;
+    --details-border: #E3D8C7;
+    --details-accent: #C65D3A;
+
+    box-sizing: border-box;
+    width: min(520px, calc(100% - 32px));
+    max-width: 520px;
+    max-height: 85vh;
+    padding: 0;
+    overflow: auto;
+    background: var(--details-bg);
+    color: var(--details-text);
+    border: 1px solid var(--details-border);
+    border-radius: 16px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+dialog#staff-details-modal::backdrop {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+html.dark dialog#staff-details-modal,
+body.dark dialog#staff-details-modal,
+html[data-theme="dark"] dialog#staff-details-modal,
+body[data-theme="dark"] dialog#staff-details-modal {
+    --details-bg: #181614;
+    --details-surface: #24211D;
+    --details-text: #F8F4EC;
+    --details-muted: #B7AA98;
+    --details-border: #40382F;
+    --details-accent: #C65D3A;
+}
+
+dialog#staff-details-modal .card-head {
+    display: flex;
+    align-items: center;
+    padding: 22px 24px;
+    background: var(--details-accent);
+    color: #FFFFFF;
+    border: none;
+}
+
+dialog#staff-details-modal .card-head h2 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+dialog#staff-details-modal .staff-details {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+    padding: 22px;
+    background: var(--details-bg);
+}
+
+dialog#staff-details-modal .staff-details__item {
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 15px;
+    background: var(--details-surface);
+    border: 1px solid var(--details-border);
+    border-radius: 10px;
+}
+
+dialog#staff-details-modal .staff-details__label {
+    margin-bottom: 8px;
+    color: var(--details-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+}
+
+dialog#staff-details-modal .staff-details__value {
+    color: var(--details-text);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+dialog#staff-details-modal .staff-details__item:nth-child(3),
+dialog#staff-details-modal .staff-details__item:nth-child(6) {
+    grid-column: 1 / -1;
+}
+
+
+/* Assign Municipality modal */
+dialog#assignMunicipalityDialog {
+    --details-bg: #F8F4EC;
+    --details-surface: #FFFFFF;
+    --details-text: #181614;
+    --details-muted: #81786B;
+    --details-border: #E3D8C7;
+    --details-accent: #C65D3A;
+
+    box-sizing: border-box;
+    width: min(460px, calc(100% - 32px));
+    max-width: 460px;
+    max-height: 85vh;
+    padding: 0;
+    overflow: auto;
+    background: var(--details-bg);
+    color: var(--details-text);
+    border: 1px solid var(--details-border);
+    border-radius: 16px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+dialog#assignMunicipalityDialog::backdrop {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+/* Dark theme */
+html.dark dialog#assignMunicipalityDialog,
+body.dark dialog#assignMunicipalityDialog,
+html[data-theme="dark"] dialog#assignMunicipalityDialog,
+body[data-theme="dark"] dialog#assignMunicipalityDialog {
+    --details-bg: #181614;
+    --details-surface: #24211D;
+    --details-text: #F8F4EC;
+    --details-muted: #B7AA98;
+    --details-border: #40382F;
+    --details-accent: #C65D3A;
+}
+
+/* Terracotta header */
+dialog#assignMunicipalityDialog .card-head {
+    display: flex;
+    align-items: center;
+    padding: 22px 24px;
+    background: var(--details-accent);
+    color: #FFFFFF;
+    border: none;
+}
+
+dialog#assignMunicipalityDialog .card-head h2 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* Modal content */
+dialog#assignMunicipalityDialog .assign-farmers-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 24px;
+    background: var(--details-bg);
+}
+
+dialog#assignMunicipalityDialog .assign-farmers-content>p {
+    margin: 0;
+    color: var(--details-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Municipality label */
+dialog#assignMunicipalityDialog .assign-farmers-content label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--details-text);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Municipality dropdown */
+dialog#assignMunicipalityDialog .staff-municipality-filter {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid var(--details-border);
+    border-radius: 8px;
+    background: var(--details-surface);
+    color: var(--details-text);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+dialog#assignMunicipalityDialog .staff-municipality-filter:focus-visible {
+    outline: 2px solid var(--details-accent);
+    outline-offset: 2px;
+}
+
+dialog#assignMunicipalityDialog .staff-municipality-filter option {
+    background: var(--details-surface);
+    color: var(--details-text);
+}
+
+/* Error messages */
+dialog#assignMunicipalityDialog .msg.error {
+    margin: 0;
+    color: var(--error, #B42318);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Cancel and Save buttons */
+dialog#assignMunicipalityDialog .staff-buttons {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 4px 24px 24px;
+    margin: 0;
+}
+
+dialog#assignMunicipalityDialog .staff-buttons .btn {
+    min-height: 40px;
+}
+
+/* Mobile layout */
+@media (max-width: 480px) {
+    dialog#assignMunicipalityDialog {
+        width: calc(100% - 24px);
+        max-height: 90vh;
+        border-radius: 12px;
+    }
+
+    dialog#assignMunicipalityDialog .card-head {
+        padding: 18px;
+    }
+
+    dialog#assignMunicipalityDialog .assign-farmers-content {
+        gap: 12px;
+        padding: 18px;
+    }
+
+    dialog#assignMunicipalityDialog .staff-buttons {
+        flex-direction: column-reverse;
+        padding: 0 18px 18px;
+    }
+
+    dialog#assignMunicipalityDialog .staff-buttons .btn {
+        width: 100%;
+    }
 }

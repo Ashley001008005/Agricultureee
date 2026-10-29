@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Assigned Farm Managers | Tanikala</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/signup.css">
+    <link rel="stylesheet" href="../../css/assigned-farm-managers.css">
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="logo">
+            <h1>T<span>ani</span>kala</h1>
+            <img src="../../assets/logo.png" alt="Tanikala Logo" class="logo-image">
+        </div>
+    </header>
+
+    <main class="admin-page">
+        <header class="page-header">
+            <div>
+                <h1>Assigned Farm Managers</h1>
+                <p>Manage municipality assignments for farm managers.</p>
+            </div>
+
+            <div class="page-actions">
+                <button class="btn ghost" type="button" onclick="history.back()">
+                    Back
+                </button>
+
+                <button class="btn" id="assignMunicipalityBtn" type="button">
+                    <span>Assign Municipality</span>
+                    <span class="button-arrow">→</span>
+                </button>
+            </div>
+        </header>
+
+        <section class="card">
+            <div class="section-heading">
+                <span class="section-number">01</span>
+                <div>
+                    <h2>Farm Manager Assignments</h2>
+                    <p>Search and manage municipality coverage</p>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <input id="managerSearch" type="search" placeholder="Search farm manager or municipality"
+                    aria-label="Search assigned farm managers">
+
+                <select id="assignmentFilter" aria-label="Filter assignments">
+                    <option value="all">All farm managers</option>
+                    <option value="assigned">Assigned</option>
+                    <option value="unassigned">Not assigned</option>
+                </select>
+            </div>
+
+            <div id="assignmentMessage" role="status"></div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Farm Manager</th>
+                            <th>Municipality</th>
+                            <th>Assigned By</th>
+                            <th>Date Assigned</th>
+                            <th>Farm / Farmer Assignments</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="assignedManagersBody">
+                        <tr>
+                            <td colspan="6">Loading assignments...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="municipalityDialog" class="details staff-dialog">
+        <form id="municipalityForm" class="staff-form">
+            <div class="section-heading">
+                <span class="section-number">01</span>
+                <div>
+                    <h2>Assign Municipality</h2>
+                    <p>Set a farm manager's coverage area</p>
+                </div>
+            </div>
+
+            <label>
+                Farm Manager
+                <select id="managerSelect" required>
+                    <option value="">Select a farm manager</option>
+                </select>
+            </label>
+
+            <label>
+                Municipality
+                <input id="municipalityInput" type="text" placeholder="e.g. San Pedro, Laguna" required>
+            </label>
+
+            <div class="approval-note">
+                <span class="approval-icon">◷</span>
+                <p>
+                    <strong>Authorization scope</strong>
+                    This assignment determines the municipality the farm manager
+                    is authorized to manage.
+                </p>
+            </div>
+
+            <div class="staff-buttons">
+                <button class="btn ghost" id="cancelAssignment" type="button">
+                    Cancel
+                </button>
+
+                <button class="btn" type="submit">
+                    <span>Save Assignment</span>
+                    <span class="button-arrow">→</span>
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <script type="module" src="../../js/admin/assigned-farm-managers.js"></script>
+    <script type="module" src="../../js/theme.js"></script>
+</body>
+
+</html>

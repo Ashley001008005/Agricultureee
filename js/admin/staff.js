@@ -28,7 +28,47 @@ function openForm({ account, roles, statuses, isDuplicate, onSave }) {
     const editing = Boolean(account);
     const nameIn = h('input', { type: 'text', name: 'name', value: account?.name ?? '', autocomplete: 'off', 'aria-required': 'true' });
     const emailIn = h('input', { type: 'email', name: 'email', value: account?.email ?? '', autocomplete: 'off', 'aria-required': 'true' });
-    const passwordIn = h('input', { type: 'password', name: 'password', autocomplete: 'new-password', 'aria-required': 'true' });
+
+    const passwordIn = h("input", {
+        type: "password",
+        name: "password",
+        autocomplete: "new-password",
+        "aria-required": "true"
+    });
+
+    const passwordToggle = h(
+        "button",
+        {
+            type: "button",
+            class: "password-toggle",
+            "aria-label": "Show password",
+            "aria-pressed": "false",
+            onclick: () => {
+                const showPassword = passwordIn.type === "password";
+
+                passwordIn.type = showPassword ? "text" : "password";
+                passwordToggle.textContent = showPassword ? "Hide" : "Show";
+
+                passwordToggle.setAttribute(
+                    "aria-label",
+                    showPassword ? "Hide password" : "Show password"
+                );
+
+                passwordToggle.setAttribute(
+                    "aria-pressed",
+                    String(showPassword)
+                );
+            }
+        },
+        "Show"
+    );
+
+    const passwordControl = h(
+        "div",
+        { class: "password-field" },
+        passwordIn,
+        passwordToggle
+    );
     const roleSel = h('select', { name: 'role', 'aria-required': 'true' },
         h('option', { value: '', selected: !account }, 'Select a role'),
         roles.map((r) => h('option', { value: String(r.id), selected: r.id === account?.roleId }, r.name)));
@@ -46,7 +86,16 @@ function openForm({ account, roles, statuses, isDuplicate, onSave }) {
     };
     const errEls = Object.fromEntries(Object.keys(fields).map((k) => [k, h('small', { class: 'err', hidden: true })]));
     const formError = h('p', { class: 'msg error', role: 'alert', hidden: true });
-    const field = (key, label) => h('label', {}, label, fields[key], errEls[key]);
+
+    const field = (key, label) =>
+        h(
+            "label",
+            {},
+            label,
+            key === "password" ? passwordControl : fields[key],
+            errEls[key]
+        );
+
 
     const showErrors = (errors, summary) => {
         for (const k of Object.keys(fields)) {
@@ -69,10 +118,42 @@ function openForm({ account, roles, statuses, isDuplicate, onSave }) {
         else if (!EMAIL_RE.test(v.email)) errors.email = 'Enter a valid email address, like name@example.com.';
         else if (isDuplicate(v.email, account?.id)) errors.email = 'Another staff account already uses this email.';
 
+
         if (!editing) {
-            if (!v.password) errors.password = 'Password is required.';
-            else if (v.password.length < 15) errors.password = 'Use at least 15 characters.';
+            if (!v.password) {
+                errors.password = "Password is required.";
+            } else {
+                const passwordPolicy = [
+                    {
+                        test: v.password.length >= 12,
+                        message: "Password must be at least 12 characters long."
+                    },
+                    {
+                        test: /[a-z]/.test(v.password),
+                        message: "Password must contain at least one lowercase letter."
+                    },
+                    {
+                        test: /[A-Z]/.test(v.password),
+                        message: "Password must contain at least one uppercase letter."
+                    },
+                    {
+                        test: /\d/.test(v.password),
+                        message: "Password must contain at least one number."
+                    },
+                    {
+                        test: /[^A-Za-z0-9]/.test(v.password),
+                        message: "Password must contain at least one special character."
+                    }
+                ];
+
+                const failedRule = passwordPolicy.find(rule => !rule.test);
+
+                if (failedRule) {
+                    errors.password = failedRule.message;
+                }
+            }
         }
+
 
         if (!v.roleId) errors.role = 'Please choose a role.';
         else if (!roles.some((r) => r.id === v.roleId)) errors.role = 'Choose one of the listed roles.';
@@ -228,6 +309,19 @@ export async function render(root, ctx) {
             },
         }, lookups.roles.map((r) => h('option', { value: String(r.id), selected: r.id === a.roleId }, r.name)));
 
+        const assignMunicipalityBtn = h(
+            'button',
+            {
+                class: 'btn ghost',
+                type: 'button',
+                hidden: true,
+                onclick: () => {
+                    window.location.href = './assigned-farm-managers.html';
+                },
+            },
+            'Assign Municipality'
+        );
+
         const actionsCell = (a) => a.status === 'deleted'
             ? h('div', { class: 'actions' },
                 h('button', { class: 'btn ghost', type: 'button', onclick: (e) => setStatus(a, 'active', e.currentTarget) }, 'Restore'),
@@ -311,18 +405,60 @@ export async function render(root, ctx) {
     };
 
     const addBtn = h('button', { class: 'btn', type: 'button', disabled: true, onclick: openAdd }, 'Add Account');
+    const assignMunicipalityBtn = h('button', {
+        class: 'btn',
+        type: 'button',
+        onclick: () => {
+            window.location.href = './assigned-farm-managers.html';
+        }
+    }, 'Assign Municipality');
+
+    assignMunicipalityBtn.hidden = true;
 
     const load = async () => {
         holder.replaceChildren(h('p', { class: 'muted' }, 'Loading staff accounts...'));
         count.textContent = '';
         try {
             [lookups, accounts] = await Promise.all([getLookups(), listStaff()]);
-            toolbar.replaceChildren(search,
-                select([['all', 'All roles'], ...lookups.roles.map((r) => [String(r.id), r.name])], filter.role,
-                    (v) => { filter.role = v; draw(); }, 'Filter by role'),
-                select([['current', 'All except deleted'], ['active', 'Active'], ['suspended', 'Suspended'],
-                ['inactive', 'Inactive'], ['deleted', 'Deleted'], ['all', 'Everything']], filter.status,
-                    (v) => { filter.status = v; draw(); }, 'Filter by status'));
+            toolbar.replaceChildren(
+                search,
+                select(
+                    [['all', 'All roles'], ...lookups.roles.map(
+                        (r) => [String(r.id), r.name]
+                    )],
+                    filter.role,
+                    (v) => {
+                        filter.role = v;
+
+                        const selectedRole = lookups.roles.find(
+                            (r) => String(r.id) === v
+                        );
+
+                        assignMunicipalityBtn.hidden =
+                            selectedRole?.name?.toLowerCase().trim() !== 'farm manager';
+
+                        draw();
+                    },
+                    'Filter by role'
+                ),
+                select(
+                    [
+                        ['current', 'All except deleted'],
+                        ['active', 'Active'],
+                        ['suspended', 'Suspended'],
+                        ['inactive', 'Inactive'],
+                        ['deleted', 'Deleted'],
+                        ['all', 'Everything']
+                    ],
+                    filter.status,
+                    (v) => {
+                        filter.status = v;
+                        draw();
+                    },
+                    'Filter by status'
+                ),
+                assignMunicipalityBtn
+            );
             addBtn.disabled = false;
             draw();
         } catch (err) {

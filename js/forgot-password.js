@@ -29,8 +29,10 @@ form.addEventListener("submit", async (event) => {
     message.hidden = true;
 
     try {
-        const redirectTo =
-            "http://127.0.0.1:5500/html/reset-password.html";
+        const redirectTo = window.location.hostname === "127.0.0.1" ||
+            window.location.hostname === "localhost"
+            ? "http://127.0.0.1:5500/html/reset-password.html"
+            : "https://eligiofrancisrobert.github.io/Tanikala/html/reset-password.html";
 
         const { error } = await supabase.auth.resetPasswordForEmail(
             email,
